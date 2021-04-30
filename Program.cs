@@ -1,6 +1,7 @@
 ﻿using System;
 using RhythmsGonnaGetYou.Models;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace RhythmsGonnaGetYou
 {
