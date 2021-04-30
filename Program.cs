@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace RhythmsGonnaGetYou
 {
-    class BandDatabaseContext : DbContext
+    class BandDatabase1Context : DbContext
     {
         public DbSet<Band> Bands { get; set; }
         // public DbSet<Album> Albums { get; set; }
@@ -13,7 +13,7 @@ namespace RhythmsGonnaGetYou
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("server=localhost;database=BandDatabase");
+            optionsBuilder.UseNpgsql("server=localhost;database=BandDatabase1");
         }
     }
 
@@ -67,7 +67,7 @@ namespace RhythmsGonnaGetYou
         static void Main(string[] args)
         {
 
-            var context = new BandDatabaseContext();
+            var context = new BandDatabase1Context();
 
             var keepGoing = true;
 
@@ -75,6 +75,8 @@ namespace RhythmsGonnaGetYou
             {
 
                 var bandCount = context.Bands.Count();
+
+                Console.WriteLine($"There are {bandCount} bands in the database");
 
                 Console.WriteLine("");
                 Console.WriteLine("Choose a menu option:");
