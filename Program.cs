@@ -4,6 +4,18 @@ using System.Linq;
 
 namespace RhythmsGonnaGetYou
 {
+    class BandDatabaseContext : DbContext
+    {
+        public DbSet<Band> Bands { get; set; }
+        public DbSet<Album> Albums { get; set; }
+        public DbSet<Song> Songs { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseNpgsql("server=localhost;database=BandDatabase");
+        }
+    }
+
     class Band
     {
         public string ID { get; set; }
@@ -22,7 +34,6 @@ namespace RhythmsGonnaGetYou
         public string ID { get; set; }
         public string Title { get; set; }
         public bool IsExplicit { get; set; }
-        //datetime? idk
         public DateTime ReleaseDate { get; set; }
     }
 
@@ -34,6 +45,7 @@ namespace RhythmsGonnaGetYou
         public int Duration { get; set; }
 
     }
+
     class Program
     {
 
@@ -141,18 +153,6 @@ namespace RhythmsGonnaGetYou
                 {
                     Console.WriteLine("View all bands that are NOT signed!");
                 }
-
-
-
-
-
-
-
-
-
-
-
-
 
             }
         }
