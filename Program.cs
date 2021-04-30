@@ -26,10 +26,9 @@ namespace RhythmsGonnaGetYou
         public int NumberOfMembers { get; set; }
         public string Website { get; set; }
         public string Style { get; set; }
-        public bool IsSigned { get; set; }
+        public string IsSigned { get; set; }
         public string ContactName { get; set; }
         public string ContactPhoneNumber { get; set; }
-        public int AlbumID { get; set; }
         public List<Album> Albums { get; set; }
     }
 
@@ -37,7 +36,7 @@ namespace RhythmsGonnaGetYou
     {
         public int ID { get; set; }
         public string Title { get; set; }
-        public bool IsExplicit { get; set; }
+        public string IsExplicit { get; set; }
         public DateTime ReleaseDate { get; set; }
         public int BandID { get; set; }
         public List<Song> Songs { get; set; }
@@ -70,21 +69,6 @@ namespace RhythmsGonnaGetYou
             return userIntInput;
         }
 
-        static bool PromptForBool(string prompt)
-        {
-            Console.Write(prompt);
-            var boolPrompt = Console.ReadLine();
-
-            if (boolPrompt == "no")
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-
         static void Main(string[] args)
         {
 
@@ -98,13 +82,13 @@ namespace RhythmsGonnaGetYou
                 Console.WriteLine("");
                 Console.WriteLine($"There are currently {bandCount} bands in the database.");
 
-                //show albums that correspond with bands
-                var bandsAndAlbums = context.Bands.Include(band => band.Albums);
+                // show albums that correspond with bands
+                // var bandsAndAlbums = context.Bands.Include(band => band.Albums);
 
-                foreach (var band in bandsAndAlbums)
-                {
-                    Console.WriteLine($"Band: {band.Name} - Album: {band.Albums[0].Title}");
-                }
+                // foreach (var band in bandsAndAlbums)
+                // {
+                //     Console.WriteLine($"Band: {band.Name} - Album: {band.Albums[0].Title}");
+                // }
 
 
                 Console.WriteLine("");
@@ -132,34 +116,54 @@ namespace RhythmsGonnaGetYou
                 }
                 else if (choice == "add band")
                 {
-                    // var newBandName = PromptForString("Enter the name of the band you want to add: ");
-                    // var newBandCountry = PromptForString("Enter the band's country of origin: ");
-                    // var numberOfBandMembers = PromptForInteger("Enter the number of band members: ");
-                    // var newBandWebsite = PromptForString("Enter the band's website: ");
-                    // var newBandStyle = PromptForString("Enter the band's style/genre: ");
-                    // var newBandSignedOrNot = PromptForBool("Are they signed? yes/no: ");
-                    // var newContactName = PromptForString("Enter the band's contact name: ");
-                    // var newPhoneNumber = PromptForString("Enter the band's phone number: ");
+                    //add band
+                    //broken, album ID issue
 
-                    var newBand = new Band();
+                    Console.Write("Enter the name of the band: ");
+                    var name = Console.ReadLine();
 
-                    newBand.Name = PromptForString("Enter the band's name: ");
-                    newBand.CountryOfOrigin = PromptForString("Enter the band's country: ");
-                    newBand.NumberOfMembers = PromptForInteger("Enter the number of band members: ");
-                    newBand.Website = PromptForString("Enter the website: ");
-                    newBand.Style = PromptForString("Enter their style: ");
-                    newBand.IsSigned = PromptForBool("Are they signed or not? Yes/no: ");
-                    newBand.ContactName = PromptForString("Enter a contact name: ");
-                    newBand.ContactPhoneNumber = PromptForString("Enter a contact phone number: ");
+                    Console.Write("Enter the band's country: ");
+                    var country = Console.ReadLine();
 
+                    Console.Write("How many members? ");
+                    var numberOfMembers = int.Parse(Console.ReadLine());
+
+                    Console.Write("What is their website? ");
+                    var website = Console.ReadLine();
+
+                    Console.Write("What is their genre? ");
+                    var style = Console.ReadLine();
+
+                    Console.Write("Are they signed? Yes/No: ");
+                    var signedOrNot = Console.ReadLine();
+
+                    Console.Write("Add a contact name: ");
+                    var contactName = Console.ReadLine();
+
+                    Console.Write("Add a contact number: ");
+                    var contactNumber = Console.ReadLine();
+
+                    var newBand = new Band
+                    {
+                        Name = name,
+                        CountryOfOrigin = country,
+                        NumberOfMembers = numberOfMembers,
+                        Website = website,
+                        Style = style,
+                        IsSigned = signedOrNot,
+                        ContactName = contactName,
+                        ContactPhoneNumber = contactNumber,
+                    };
                     context.Bands.Add(newBand);
                     context.SaveChanges();
 
                     Console.WriteLine("");
                     Console.WriteLine($"You have added the band '{newBand.Name}' to the database!");
                 }
+                //view
                 else if (choice == "view")
                 {
+                    var sorted = context.Bands.Select(band => band.Name);
                     foreach (var band in context.Bands)
                     {
                         Console.WriteLine($"There is a band named {band.Name}.");
@@ -167,12 +171,27 @@ namespace RhythmsGonnaGetYou
                 }
                 else if (choice == "add album")
                 {
-                    var newAlbumName = PromptForString("Enter the album's title: ");
-                    var newAlbumExplicitOrNot = PromptForString("Is it explicit? ");
-                    var newAlbumReleaseDate = PromptForString("Enter its release date: ");
+                    Console.Write("What is the album title?: ");
+                    var albumTitle = Console.ReadLine();
+
+                    Console.Write("Is it explicit? Yes/No: ");
+                    var explicitYesNo = Console.ReadLine();
+
+                    Console.Write("What is the release date? ");
+                    var releaseDate = Console.ReadLine();
 
                     Console.WriteLine("");
                     Console.WriteLine("You've added an album!");
+
+                    var newAlbum = new Album
+                    {
+                        Title = albumTitle,
+                        IsExplicit = explicitYesNo,
+                        // ReleaseDate = DateTime.releaseDate
+                    };
+                    context.Albums.Add(newAlbum);
+                    context.SaveChanges();
+
                 }
                 else if (choice == "add song")
                 {
