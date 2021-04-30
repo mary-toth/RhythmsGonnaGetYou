@@ -4,6 +4,36 @@ using System.Linq;
 
 namespace RhythmsGonnaGetYou
 {
+    class Band
+    {
+        public string ID { get; set; }
+        public string Name { get; set; }
+        public string CountryOfOrigin { get; set; }
+        public int NumberOfMembers { get; set; }
+        public string Website { get; set; }
+        public string Style { get; set; }
+        public bool IsSigned { get; set; }
+        public string ContactName { get; set; }
+        public string ContactPhoneNumber { get; set; }
+    }
+
+    class Album
+    {
+        public string ID { get; set; }
+        public string Title { get; set; }
+        public bool IsExplicit { get; set; }
+        //datetime? idk
+        public DateTime ReleaseDate { get; set; }
+    }
+
+    class Song
+    {
+        public int ID { get; set; }
+        public int TrackNumber { get; set; }
+        public string Title { get; set; }
+        public int Duration { get; set; }
+
+    }
     class Program
     {
 
