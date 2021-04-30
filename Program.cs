@@ -67,16 +67,20 @@ namespace RhythmsGonnaGetYou
         static void Main(string[] args)
         {
 
-            var context = new BandDatabase1Context();
-
             var keepGoing = true;
 
             while (keepGoing)
             {
+                var context = new BandDatabase1Context();
 
                 var bandCount = context.Bands.Count();
 
                 Console.WriteLine($"There are {bandCount} bands in the database");
+
+                foreach (var band in context.Bands)
+                {
+                    Console.WriteLine($"There is a band named {band.Name}");
+                }
 
                 Console.WriteLine("");
                 Console.WriteLine("Choose a menu option:");
@@ -117,6 +121,8 @@ namespace RhythmsGonnaGetYou
                 }
                 else if (choice == "view")
                 {
+
+
                     Console.WriteLine("View all the bands!");
                 }
                 else if (choice == "add album")
