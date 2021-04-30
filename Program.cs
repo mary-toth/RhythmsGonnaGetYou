@@ -8,8 +8,8 @@ namespace RhythmsGonnaGetYou
     class BandDatabaseContext : DbContext
     {
         public DbSet<Band> Bands { get; set; }
-        public DbSet<Album> Albums { get; set; }
-        public DbSet<Song> Songs { get; set; }
+        // public DbSet<Album> Albums { get; set; }
+        // public DbSet<Song> Songs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -67,10 +67,15 @@ namespace RhythmsGonnaGetYou
         static void Main(string[] args)
         {
 
+            var context = new BandDatabaseContext();
+
             var keepGoing = true;
 
             while (keepGoing)
             {
+
+                var bandCount = context.Bands.Count();
+
                 Console.WriteLine("");
                 Console.WriteLine("Choose a menu option:");
                 Console.WriteLine("***");
