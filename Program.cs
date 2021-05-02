@@ -164,9 +164,10 @@ namespace RhythmsGonnaGetYou
                 else if (choice == "view")
                 {
                     var sorted = context.Bands.Select(band => band.Name);
+                    Console.WriteLine("Bands in the database:");
                     foreach (var band in context.Bands)
                     {
-                        Console.WriteLine($"There is a band named {band.Name}.");
+                        Console.WriteLine(band.Name);
                     }
                 }
                 else if (choice == "add album")
@@ -178,16 +179,21 @@ namespace RhythmsGonnaGetYou
                     var explicitYesNo = Console.ReadLine();
 
                     Console.Write("What is the release date? ");
-                    var releaseDate = Console.ReadLine();
+                    var releaseDate = DateTime.Parse(Console.ReadLine());
+
+                    Console.Write("What is the band ID associated with this album? ");
+                    var bandID = int.Parse(Console.ReadLine());
+
 
                     Console.WriteLine("");
-                    Console.WriteLine("You've added an album!");
+                    Console.WriteLine($"You've added {albumTitle} to the album database!");
 
                     var newAlbum = new Album
                     {
                         Title = albumTitle,
                         IsExplicit = explicitYesNo,
-                        // ReleaseDate = DateTime.releaseDate
+                        ReleaseDate = releaseDate,
+                        BandID = bandID
                     };
                     context.Albums.Add(newAlbum);
                     context.SaveChanges();
@@ -204,20 +210,52 @@ namespace RhythmsGonnaGetYou
                 }
                 else if (choice == "let go")
                 {
-                    Console.WriteLine("Let a band go! Update IsSigned to False!");
+                    Console.Write("What is the name of the band you want to let go? ");
+                    var nameOfBand = Console.ReadLine();
+
+                    var existingBand = context.Bands.FirstOrDefault(band => band.Name == nameOfBand);
+
+                    if (existingBand.IsSigned != null)
+                    {
+                        existingBand.IsSigned = "No";
+                    }
+                    Console.WriteLine("");
+                    Console.WriteLine($"You have un-signed the band {nameOfBand}.");
+
+                    context.SaveChanges();
+
                 }
                 else if (choice == "resign")
                 {
-                    Console.WriteLine("Resign a band! Update IsSigned to True");
+                    Console.Write("What is the name of the band you want to sign? ");
+                    var bandToSign = Console.ReadLine();
+                    var existingBandUnsigned = context.Bands.FirstOrDefault(band => band.Name == bandToSign);
+
+                    if (existingBandUnsigned.IsSigned != null)
+                    {
+                        existingBandUnsigned.IsSigned = "Yes";
+                    }
+                    Console.WriteLine("");
+                    Console.WriteLine($"You have re-signed the band {bandToSign}.");
+
+                    context.SaveChanges();
                 }
                 else if (choice == "view album")
                 {
-                    Console.WriteLine("View all albums of a band!");
+                    // Console.Write("Enter the name of the band: ");
+                    // var bandNameToSee = Console.ReadLine();
+                    // foreach (var album in context.Albums.Where(album => album.Title == bandNameToSee));
+
                 }
                 else if (choice == "release")
                 {
-                    Console.WriteLine("View albums ordered by ReleaseDate");
+                    var sorted = context.Albums.OrderBy(album => album.ReleaseDate);
+                    foreach (var album in context.Albums)
+                    {
+                        Console.WriteLine($"{album.Title} was released on {album.ReleaseDate}.");
+                    }
                 }
+
                 else if (choice == "signed")
                 {
                     Console.WriteLine("View all bands that are signed!");
