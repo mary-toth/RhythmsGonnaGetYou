@@ -80,7 +80,8 @@ namespace RhythmsGonnaGetYou
 
                 var bandCount = context.Bands.Count();
                 Console.WriteLine("");
-                Console.WriteLine($"There are currently {bandCount} bands in the database.");
+
+                Console.WriteLine($"Welcome! There are currently {bandCount} bands in the database.");
 
                 // show albums that correspond with bands
                 // var bandsAndAlbums = context.Bands.Include(band => band.Albums);
@@ -89,11 +90,9 @@ namespace RhythmsGonnaGetYou
                 // {
                 //     Console.WriteLine($"Band: {band.Name} - Album: {band.Albums[0].Title}");
                 // }
-
-
-                Console.WriteLine("");
-                Console.WriteLine("Choose a menu option:");
-                Console.WriteLine("***");
+                Console.WriteLine("*************************");
+                Console.WriteLine("Please choose a menu option below:");
+                Console.WriteLine("*************************");
                 Console.WriteLine("Add new band - type Add Band");
                 Console.WriteLine("View all bands - type View");
                 Console.WriteLine("Add an album to the database - type Add Album");
@@ -105,7 +104,7 @@ namespace RhythmsGonnaGetYou
                 Console.WriteLine("View all bands that are signed - type Signed");
                 Console.WriteLine("View all bands that are not signed - type Not Signed");
                 Console.WriteLine("Quit the program - type Quit");
-                Console.WriteLine("***");
+                Console.WriteLine("*************************");
 
                 var choice = Console.ReadLine().ToLower();
                 Console.WriteLine("");
@@ -198,7 +197,7 @@ namespace RhythmsGonnaGetYou
                     context.SaveChanges();
 
                 }
-                //add song to an album ***** NOT DONE *****
+                //add song to an album
                 else if (choice == "add song")
                 {
                     Console.Write("What is the track number? ");
@@ -224,7 +223,7 @@ namespace RhythmsGonnaGetYou
                     context.SaveChanges();
 
                     Console.WriteLine("");
-                    Console.WriteLine($"You've added {trackTitle}.");
+                    Console.WriteLine($"You've added {trackTitle} to the database.");
 
                 }
                 //let bands go 
@@ -263,6 +262,16 @@ namespace RhythmsGonnaGetYou
                 }
                 else if (choice == "view album")
                 {
+                    Console.WriteLine("Choose a band to see their albums: ");
+                    var bandChosen = Console.ReadLine();
+
+                    var bandsAndAlbums = context.Bands.Include(band => band.Albums).Where(band => band.Name == bandChosen);
+
+                    foreach (var band in bandsAndAlbums)
+                    {
+                        Console.WriteLine($"{bandChosen} - Album: {band.Albums[0].Title}");
+                    }
+
                     // Console.Write("Enter the name of the band: ");
                     // var bandNameToSee = Console.ReadLine();
                     // foreach (var album in context.Albums.Where(album => album.Title == bandNameToSee));
