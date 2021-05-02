@@ -114,11 +114,9 @@ namespace RhythmsGonnaGetYou
                 {
                     keepGoing = false;
                 }
+                // add band
                 else if (choice == "add band")
                 {
-                    //add band
-                    //broken, album ID issue
-
                     Console.Write("Enter the name of the band: ");
                     var name = Console.ReadLine();
 
@@ -170,6 +168,7 @@ namespace RhythmsGonnaGetYou
                         Console.WriteLine(band.Name);
                     }
                 }
+                //add album to database
                 else if (choice == "add album")
                 {
                     Console.Write("What is the album title?: ");
@@ -199,15 +198,36 @@ namespace RhythmsGonnaGetYou
                     context.SaveChanges();
 
                 }
+                //add song to an album ***** NOT DONE *****
                 else if (choice == "add song")
                 {
-                    var newSongTrackNumber = PromptForInteger("Enter the song's track number: ");
-                    var newSongTitle = PromptForString("Enter the song's title: ");
-                    var newSongDuration = PromptForInteger("Enter the song's duration: ");
+                    Console.Write("What is the track number? ");
+                    var trackNumber = int.Parse(Console.ReadLine());
+
+                    Console.Write("What is the song's title? ");
+                    var trackTitle = Console.ReadLine();
+
+                    Console.Write("What is the duration? ");
+                    var trackDuration = int.Parse(Console.ReadLine());
+
+                    Console.Write("What is the album ID associated with this song? ");
+                    var albumID = int.Parse(Console.ReadLine());
+
+                    var newSong = new Song
+                    {
+                        TrackNumber = trackNumber,
+                        Title = trackTitle,
+                        Duration = trackDuration,
+                        AlbumID = albumID
+                    };
+                    context.Songs.Add(newSong);
+                    context.SaveChanges();
 
                     Console.WriteLine("");
-                    Console.WriteLine("You've added a song!");
+                    Console.WriteLine($"You've added {trackTitle}.");
+
                 }
+                //let bands go 
                 else if (choice == "let go")
                 {
                     Console.Write("What is the name of the band you want to let go? ");
@@ -225,6 +245,7 @@ namespace RhythmsGonnaGetYou
                     context.SaveChanges();
 
                 }
+                //re-sign bands
                 else if (choice == "resign")
                 {
                     Console.Write("What is the name of the band you want to sign? ");
@@ -247,6 +268,7 @@ namespace RhythmsGonnaGetYou
                     // foreach (var album in context.Albums.Where(album => album.Title == bandNameToSee));
 
                 }
+                //show bands ordered by their release date
                 else if (choice == "release")
                 {
                     var sorted = context.Albums.OrderBy(album => album.ReleaseDate);
@@ -255,7 +277,7 @@ namespace RhythmsGonnaGetYou
                         Console.WriteLine($"{album.Title} was released on {album.ReleaseDate}.");
                     }
                 }
-
+                //show bands that are signed
                 else if (choice == "signed")
                 {
                     var sorted = context.Bands.Where(band => band.IsSigned == "Yes");
@@ -266,6 +288,7 @@ namespace RhythmsGonnaGetYou
                         Console.WriteLine(band.Name);
                     }
                 }
+                //show bands that are NOT signed
                 else
                 {
                     var sorted = context.Bands.Where(band => band.IsSigned == "No");
