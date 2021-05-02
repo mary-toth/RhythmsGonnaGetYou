@@ -268,7 +268,13 @@ namespace RhythmsGonnaGetYou
                 }
                 else
                 {
-                    Console.WriteLine("View all bands that are NOT signed!");
+                    var sorted = context.Bands.Where(band => band.IsSigned == "No");
+
+                    Console.WriteLine("Bands that are not signed:");
+                    foreach (var band in sorted)
+                    {
+                        Console.WriteLine(band.Name);
+                    }
                 }
 
             }
