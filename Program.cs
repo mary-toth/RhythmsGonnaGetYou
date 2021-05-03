@@ -156,7 +156,7 @@ namespace RhythmsGonnaGetYou
                         Console.Write("Is it explicit? Yes/No: ");
                         var explicitYesNo = Console.ReadLine();
 
-                        Console.Write("What is the release date? ");
+                        Console.Write("What is the release date? YYYY/MM/DD ");
                         var releaseDate = DateTime.Parse(Console.ReadLine());
 
                         Console.Write("What is the band ID associated with this album? ");
@@ -226,9 +226,10 @@ namespace RhythmsGonnaGetYou
                     if (viewChoice == "album")
                     {
                         Console.WriteLine("");
+
                         var sorted = context.Albums.OrderBy(album => album.ReleaseDate);
 
-                        foreach (var album in context.Albums)
+                        foreach (var album in sorted)
                         {
                             Console.WriteLine($"{album.Title} was released on {album.ReleaseDate}.");
                         }
@@ -240,83 +241,80 @@ namespace RhythmsGonnaGetYou
                         var bandChosen = Console.ReadLine();
                         Console.WriteLine("");
 
-                        var bandsAndAlbums = context.Bands.Include(band => band.Albums).Where(band => band.Name == bandChosen);
+                        var bandsAndAlbums = context.Bands.Include(band => band.Albums).FirstOrDefault(band => band.Name == bandChosen);
 
-                        foreach (var band in bandsAndAlbums)
+                        foreach (var album in bandsAndAlbums.Albums)
                         {
-                            Console.WriteLine($"{bandChosen} - Album: {band.Albums[0].Title}");
+                            Console.WriteLine($"{bandChosen} - Album: {album.Title}");
+                        }
+                    }
+                    else if (choice == "c")
+                    {
+                        Console.WriteLine("Type [A] to alter contracts. Type [V] to view contracts.");
+                        var contractChoice = Console.ReadLine();
+
+                        if (contractChoice == "a")
+                        {
+                            Console.WriteLine("Type [S] to sign a band. Type [L] to let a band go. ");
+                            var secondChoice = Console.ReadLine();
+
+                            //sign band
+                            if (secondChoice == "s")
+                            {
+                                Console.Write("What is the name of the band you want to sign? ");
+                                var bandToSign = Console.ReadLine();
+                                var existingBandUnsigned = context.Bands.FirstOrDefault(band => band.Name == bandToSign);
+
+                                existingBandUnsigned.IsSigned = "Yes";
+
+                                Console.WriteLine("");
+                                Console.WriteLine($"You have signed the band {bandToSign}.");
+
+                                context.SaveChanges();
+                            }
+                            //unsign band
+                            if (secondChoice == "l")
+                            {
+                                Console.Write("What is the name of the band you want to let go? ");
+                                var nameOfBand = Console.ReadLine();
+
+                                var existingBand = context.Bands.FirstOrDefault(band => band.Name == nameOfBand);
+
+                                existingBand.IsSigned = "No";
+
+                                Console.WriteLine("");
+                                Console.WriteLine($"You have un-signed the band {nameOfBand}.");
+
+                                context.SaveChanges();
+                            }
                         }
 
-                    }
-                }
-                else if (choice == "c")
-                {
-                    Console.WriteLine("Type [A] to alter contracts. Type [V] to view contracts.");
-                    var contractChoice = Console.ReadLine();
-
-                    if (contractChoice == "a")
-                    {
-                        Console.WriteLine("Type [S] to sign a band. Type [L] to let a band go. ");
-                        var secondChoice = Console.ReadLine();
-
-                        //sign band
-                        if (secondChoice == "s")
+                        //view all contracts
+                        if (contractChoice == "v")
                         {
-                            Console.Write("What is the name of the band you want to sign? ");
-                            var bandToSign = Console.ReadLine();
-                            var existingBandUnsigned = context.Bands.FirstOrDefault(band => band.Name == bandToSign);
-
-                            existingBandUnsigned.IsSigned = "Yes";
+                            var sorted = context.Bands.Where(band => band.IsSigned == "Yes");
 
                             Console.WriteLine("");
-                            Console.WriteLine($"You have signed the band {bandToSign}.");
-
-                            context.SaveChanges();
-                        }
-                        //unsign band
-                        if (secondChoice == "l")
-                        {
-                            Console.Write("What is the name of the band you want to let go? ");
-                            var nameOfBand = Console.ReadLine();
-
-                            var existingBand = context.Bands.FirstOrDefault(band => band.Name == nameOfBand);
-
-                            existingBand.IsSigned = "No";
+                            Console.WriteLine("Bands that are signed:");
+                            foreach (var band in sorted)
+                            {
+                                Console.WriteLine(band.Name);
+                            }
 
                             Console.WriteLine("");
-                            Console.WriteLine($"You have un-signed the band {nameOfBand}.");
+                            var sortedNotSigned = context.Bands.Where(band => band.IsSigned == "No");
 
-                            context.SaveChanges();
-                        }
-                    }
+                            Console.WriteLine("Bands that are not signed:");
+                            foreach (var band in sortedNotSigned)
+                            {
+                                Console.WriteLine(band.Name);
+                            }
 
-                    //view all contracts
-                    if (contractChoice == "v")
-                    {
-                        var sorted = context.Bands.Where(band => band.IsSigned == "Yes");
-
-                        Console.WriteLine("");
-                        Console.WriteLine("Bands that are signed:");
-                        foreach (var band in sorted)
-                        {
-                            Console.WriteLine(band.Name);
-                        }
-
-                        Console.WriteLine("");
-                        var sortedNotSigned = context.Bands.Where(band => band.IsSigned == "No");
-
-                        Console.WriteLine("Bands that are not signed:");
-                        foreach (var band in sortedNotSigned)
-                        {
-                            Console.WriteLine(band.Name);
                         }
 
                     }
-
-
 
                 }
-
             }
         }
     }
