@@ -258,13 +258,15 @@ namespace RhythmsGonnaGetYou
                     if (contractChoice == "a")
                     {
                         Console.WriteLine("Type [S] to sign a band. Type [L] to let a band go. ");
-                        var secondChoice = Console.ReadLine();
+                        var secondContractChoice = Console.ReadLine();
 
                         //sign band
-                        if (secondChoice == "s")
+                        if (secondContractChoice == "s")
                         {
                             Console.Write("What is the name of the band you want to sign? ");
                             var bandToSign = Console.ReadLine();
+
+                            //firstordefault returns single element of the list for the first item the expression returns true
                             var existingBandUnsigned = context.Bands.FirstOrDefault(band => band.Name == bandToSign);
 
                             existingBandUnsigned.IsSigned = "Yes";
@@ -275,17 +277,17 @@ namespace RhythmsGonnaGetYou
                             context.SaveChanges();
                         }
                         //unsign band
-                        if (secondChoice == "l")
+                        if (secondContractChoice == "l")
                         {
                             Console.Write("What is the name of the band you want to let go? ");
-                            var nameOfBand = Console.ReadLine();
+                            var bandToLetGo = Console.ReadLine();
 
-                            var existingBand = context.Bands.FirstOrDefault(band => band.Name == nameOfBand);
+                            var existingBand = context.Bands.FirstOrDefault(band => band.Name == bandToLetGo);
 
                             existingBand.IsSigned = "No";
 
                             Console.WriteLine("");
-                            Console.WriteLine($"You have un-signed the band {nameOfBand}.");
+                            Console.WriteLine($"You have un-signed the band {bandToLetGo}.");
 
                             context.SaveChanges();
                         }
